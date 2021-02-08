@@ -294,6 +294,7 @@
   "expires": "Expires",
   "externalOrderId": "External Order #",
   "fieldChanged": "Field Changed",
+  "filterStatus": "Filter Status",
   "findAtLocalStore": "Find it at a Local Store",
   "firstName": "First Name",
   "firstNameMissing": "First name required",
