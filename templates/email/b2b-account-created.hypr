@@ -14,7 +14,7 @@
 </div>
 <br/>
 <div class="mz-b2b-email-body">
-   {{ labels.b2bAccountCreatedBlob|safe }}
+   {{ labels.b2bAccountCreatedBlob|string_format(domainName)|safe }}
   <br/>
   {{ labels.emailThankYou|string_format(siteContext.generalSettings.websiteName)|safe }}
 </div>

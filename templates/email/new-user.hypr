@@ -15,7 +15,7 @@
       <br/>
 
       <div class="mz-b2b-email-body">
-        {{ labels.b2bAccountWelcomeToKibo }}
+        {{ labels.newUserEmailSalutation|string_format(siteContext.generalSettings.websiteName) }}!
         <br/>
         <br/>
         {{ labels.b2bAccountWelcomeBlob|safe }}
