@@ -1,9 +1,8 @@
 define(["modules/jquery-mozu", 'modules/api', "underscore", "hyprlive", "modules/backbone-mozu", "hyprlivecontext", 'modules/models-customer', 'modules/b2b-account/child-account', 'modules/b2b-account/parent-b2baccount'], function ($, api, _, Hypr, Backbone, HyprLiveContext, CustomerModels, ChildAccount, ParentB2BAccountModal) {
 
     var childAccountPopup =  new ChildAccount.childPopupView({model:CustomerModels.EditableCustomer.fromCurrent()});
-    var userChildAccounts = [];
+    var supportedParentAccounts = [];
     var modalView = new ParentB2BAccountModal.B2bChangeParentView({ model: CustomerModels.EditableCustomer.fromCurrent() });
-    var inValidParentAccounts = [];
     var AccountHierarchyView = Backbone.MozuView.extend({
         templateName: "modules/b2b-account/account-hierarchy/account-hierarchy",
         render: function () {
@@ -44,7 +43,7 @@ define(["modules/jquery-mozu", 'modules/api', "underscore", "hyprlive", "modules
         addChildAccount: function (e) {            
             var self = this;           
             childAccountPopup.renderView();
-            childAccountPopup.render(userChildAccounts);          
+            childAccountPopup.render(supportedParentAccounts);          
         },
         expandAll: function (e) {
             $(".tree .caret").addClass("caret-down");
@@ -63,42 +62,46 @@ define(["modules/jquery-mozu", 'modules/api', "underscore", "hyprlive", "modules
         changeParentAccount: function (e) {
             var accountId = e.currentTarget.dataset.mzValue;
             var self = this;
-            inValidParentAccounts = [];
-            var validParentAccounts = [];
-            var currentAccount = this.getAccount(accountId, userChildAccounts);
-            var parentAccount = this.getAccount(currentAccount.account.parentAccountId, self.model.apiModel.data.accounts);
+            var currentAccount = this.model.getAccount(accountId, supportedParentAccounts);
+            var parentAccount = this.model.getAccount(currentAccount.account.parentAccountId, supportedParentAccounts);
+            var filteredParentAccounts = this.getSupportedParentAccounts(currentAccount, parentAccount, supportedParentAccounts);
+            modalView.renderView();
+            modalView.render(currentAccount, parentAccount.account, filteredParentAccounts);
+        },
+        getSupportedParentAccounts: function (currentAccount, parentAccount, supportedParentAccounts) {
+            var inValidParentAccounts = [];
 
             //Exclude current and it's a parent and child accounts
             inValidParentAccounts.push(currentAccount.account);
             if (parentAccount) {
                 inValidParentAccounts.push(parentAccount);
             }
-            this.getInValidParentAccounts(currentAccount.id, userChildAccounts);
-            for (var i = 0; i < userChildAccounts.length; i++) {
-                var invAcc = this.getAccount(userChildAccounts[i].account.id, inValidParentAccounts);
-                if (!invAcc) {
-                    validParentAccounts.push(userChildAccounts[i].account);//Push only valid accounts
-                }
+            this.getInValidParentAccounts(currentAccount.id, supportedParentAccounts, inValidParentAccounts);
+
+            var filteredParentAccounts = supportedParentAccounts.slice().map(function (ele) {
+                return ele.account;
+            });
+            for (var i = 0; i < inValidParentAccounts.length; i++) {
+                filteredParentAccounts = this.filterAccounts(inValidParentAccounts[i].id, filteredParentAccounts);
             }
 
-            modalView.renderView();
-            modalView.render(currentAccount, parentAccount, validParentAccounts);
+            return filteredParentAccounts;
         },
-        getAccount: function (accountId, accounts) {
-            for (var i = 0; i < accounts.length; i++) {
-                if (accounts[i].id == accountId)
-                    return accounts[i];
-            }
-        },
-        getInValidParentAccounts: function (currentAccId, accounts) {
+        getInValidParentAccounts: function (currentAccId, accounts, inValidParentAccounts) {
             if (accounts) {
                 for (var i = 0; i < accounts.length; i++) {
                     if (accounts[i].account.parentAccountId == currentAccId) {
                         inValidParentAccounts.push(accounts[i].account);
-                        this.getInValidParentAccounts(accounts[i].id, accounts);
+                        this.getInValidParentAccounts(accounts[i].id, accounts, inValidParentAccounts);
                     }
                 }
             }
+        },
+        filterAccounts: function (accountId, filteredParentAccounts) {
+            filteredParentAccounts = filteredParentAccounts.filter(function (account) {
+                return account.id != accountId;
+            });
+            return filteredParentAccounts;
         }
     });
 
@@ -159,7 +162,7 @@ define(["modules/jquery-mozu", 'modules/api', "underscore", "hyprlive", "modules
 
             if(item.canViewAccount === true && item.account.isActive === true)
             {
-                userChildAccounts.push(item);
+                supportedParentAccounts.push(item);
             }
 
             if (item.children) {

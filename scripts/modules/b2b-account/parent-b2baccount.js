@@ -27,7 +27,7 @@ define([
                 if (currentAccount) {
                     currentAccountId = currentAccount.id;
                 }
-                if (!self.model.get("parentAccountName")) {
+                if (parentAccount) {
                     self.model.set('parentAccountName', parentAccount.companyOrOrganization);
                 }
                 if (allParentAccounts) {
