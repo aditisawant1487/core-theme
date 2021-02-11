@@ -27,7 +27,7 @@ define([
         var quoteNumberFilter = "number eq ";
         var expirationDateFilter  = "expirationdate ge ";
         var statusFilter = "status cont ";
-        var accountNameFilter = "customerAccountId cont ";
+        var accountNameFilter = "customerAccountId eq ";
         var timeComponent = "T00:00:00z";
         var timeout = null;
 
