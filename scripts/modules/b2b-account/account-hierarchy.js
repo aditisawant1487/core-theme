@@ -69,30 +69,30 @@ define(["modules/jquery-mozu", 'modules/api', "underscore", "hyprlive", "modules
             modalView.render(currentAccount, parentAccount.account, filteredParentAccounts);
         },
         getSupportedParentAccounts: function (currentAccount, parentAccount, supportedParentAccounts) {
-            var inValidParentAccounts = [];
+            var invalidParentAccounts = [];
 
-            //Exclude current and it's a parent and child accounts
-            inValidParentAccounts.push(currentAccount.account);
+            //Exclude the current account, it's parent account, and any child or descendant accounts
+            invalidParentAccounts.push(currentAccount.account);
             if (parentAccount) {
-                inValidParentAccounts.push(parentAccount);
+                invalidParentAccounts.push(parentAccount);
             }
-            this.getInValidParentAccounts(currentAccount.id, supportedParentAccounts, inValidParentAccounts);
+            this.getInvalidParentAccounts(currentAccount.id, supportedParentAccounts, invalidParentAccounts);
 
             var filteredParentAccounts = supportedParentAccounts.slice().map(function (ele) {
                 return ele.account;
             });
-            for (var i = 0; i < inValidParentAccounts.length; i++) {
-                filteredParentAccounts = this.filterAccounts(inValidParentAccounts[i].id, filteredParentAccounts);
+            for (var i = 0; i < invalidParentAccounts.length; i++) {
+                filteredParentAccounts = this.filterAccounts(invalidParentAccounts[i].id, filteredParentAccounts);
             }
 
             return filteredParentAccounts;
         },
-        getInValidParentAccounts: function (currentAccId, accounts, inValidParentAccounts) {
+        getInvalidParentAccounts: function (currentAccId, accounts, invalidParentAccounts) {
             if (accounts) {
                 for (var i = 0; i < accounts.length; i++) {
                     if (accounts[i].account.parentAccountId == currentAccId) {
-                        inValidParentAccounts.push(accounts[i].account);
-                        this.getInValidParentAccounts(accounts[i].id, accounts, inValidParentAccounts);
+                        invalidParentAccounts.push(accounts[i].account);
+                        this.getInvalidParentAccounts(accounts[i].id, accounts, invalidParentAccounts);
                     }
                 }
             }
