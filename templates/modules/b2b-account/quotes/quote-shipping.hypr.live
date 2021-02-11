@@ -13,10 +13,9 @@
         <table class="mz-quote-shipping">
           <tr>
             <td>
-              <span>
+              <div>
                 <b>{{labels.chooseAddress}}</b>
-              </span>
-              <br />
+              </div>
               
               <select id="selectShippingAddress" class="mz-l-formfieldgroup-halfsize address-dropdown">
                 <option value="-1">{{labels.shippingDestinationSelect}}</option>
@@ -44,15 +43,16 @@
                 <span>{{labels.phone}}: {{model.destinations[0].destinationContact.phoneNumbers.home || model.destinations[0].destinationContact.phoneNumbers.mobile || model.destinations[0].destinationContact.phoneNumbers.work}}</span>
               </div>
               {% endif %}
-              {% if model.isUserAdmin %}
+              {% if model.isUserAdmin || model.isSalesRep %}
+              <div>
               <button class="mz-button mz-contact-save create-new-address" data-mz-action="addNewAddress" data-backdrop="true">{{labels.createNewAddress}}</button>
+              </div>
               {% endif %}
             </td>
             <td>
-              <span>
+              <div>
                 <b>{{labels.shippingMethod}}</b>
-              </span>
-              <br />
+              </div>
               <select class="mz-l-formfieldgroup-halfsize" data-mz-value="" >
                 <option selected="selected" value="">{{labels.chooseShippingMethod}}</option>
                 <option value="Fedex Ground">Fedex Ground</option>

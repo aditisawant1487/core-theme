@@ -880,7 +880,7 @@ define([
             }
         },
         setModifiedContact: function () {
-            var contacts = this.model.get('allContacts');
+            var contacts = this.getOnlyShippingAddress(this.model.get('allContacts'));
             if (this.model.apiModel.data &&
                 this.model.apiModel.data.destinations &&
                 this.model.apiModel.data.destinations.length > 0) {
@@ -903,6 +903,23 @@ define([
                 }
             }
             this.model.set('allContacts', contacts);
+        },
+
+        getOnlyShippingAddress: function (contacts) {
+            var filteredContacts = [];
+            if (contacts) {
+                for (var i = 0; i < contacts.length; i++) {
+                    var types = contacts[i].types;
+                    if (types && types.length > 0) {
+                        for (var j = 0; j < types.length; j++) {
+                            if (types[j].name === "Shipping") {
+                                filteredContacts.push(contacts[i]);
+                            }
+                        }
+                    }
+                }
+            }
+            return filteredContacts;
         },
         isShippable: function () {
             var items = this.model.apiModel.data.items;
