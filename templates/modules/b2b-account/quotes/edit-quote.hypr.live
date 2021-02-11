@@ -16,9 +16,11 @@
   <li>
     {% include "modules/b2b-account/quotes/quote-summary" with model=model %}
   </li>
+  {% if model.isShippable %}
   <li>
     {% include "modules/b2b-account/quotes/quote-shipping" with model=model %}
   </li>
+  {% endif %}
   <li>
     {% include "modules/b2b-account/quotes/quote-comments" with model=model %}
   </li>
