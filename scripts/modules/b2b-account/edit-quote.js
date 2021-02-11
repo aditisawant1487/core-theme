@@ -85,8 +85,8 @@ define([
                         self.showMessageBar(error);
                     });
                 }, function (error) {
-                    self.model.get('fullName', ' ');
-                    self.model.get('accountName', ' ');
+                    self.model.set('fullName', ' ');
+                    self.model.set('accountName', ' ');
                     self.showMessageBar(error);
                 });
             }
