@@ -340,7 +340,7 @@ define([
             {
                 index: 'auditInfo',
                 displayName: 'Created Date',
-                sortable: true,
+                sortable: false,
                 displayTemplate: function(auditInfo){
                     var date = "";
                     if (auditInfo && auditInfo.createDate) {
@@ -446,7 +446,7 @@ define([
                 {
                     index: 'auditInfo',
                     displayName: 'Created Date',
-                    sortable: true,
+                    sortable: false,
                     displayTemplate: function(auditInfo){
                         var date = "";
                         if (auditInfo && auditInfo.createDate) {
