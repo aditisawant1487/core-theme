@@ -226,9 +226,6 @@ define(["modules/mozu-utilities", "modules/jquery-mozu", 'modules/api', "undersc
 
     var B2BUsersGridCollectionModel = MozuGridCollection.extend({
         mozuType: 'b2busers',
-        baseRequestParams: {
-            accountId: require.mozuData('user').accountId
-        },
         filter: "isRemoved eq false",
         autoload: true,
         columns: [
@@ -298,12 +295,10 @@ define(["modules/mozu-utilities", "modules/jquery-mozu", 'modules/api', "undersc
             var viewB2BAccount = self.model.attributes.viewB2BAccount;
             if (viewB2BAccount) {
                 collection = new B2BUsersGridCollectionModel({});
+                collection.lastRequest.accountId = self.model.attributes.accountToView;
             }
             else {
                 collection = new UsersGridCollectionModel({});
-            }
-            if (viewB2BAccount) {
-                collection.filterBy("customerAccountId eq " + self.model.attributes.accountToView);
             }
 
             var usersGrid = new MozuGrid({
