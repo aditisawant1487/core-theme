@@ -192,6 +192,9 @@ define([
                     }
                 });
             });
+            if (viewB2BAccount) {
+                collection.filterBy("customerAccountId eq " + self.model.attributes.accountToView);
+            }
             this.initializeGrid(collection);
         },
         showMessageBar: function(error) {
@@ -202,6 +205,11 @@ define([
         },
         filter: function(collection) {
             var filterStr = "";
+            var self = this;
+            var viewB2BAccount = self.model.attributes.viewB2BAccount;
+            if (viewB2BAccount) {
+                filterStr = "customerAccountId eq " + self.model.attributes.accountToView;
+            }
             var qName = $("#searchName").val();
             var qNumber = $("#searchQuoteNumber").val();
             var status = $("#statusDropdown").val();

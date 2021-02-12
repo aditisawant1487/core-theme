@@ -288,6 +288,7 @@ define(["modules/mozu-utilities", "modules/jquery-mozu", 'modules/api', "undersc
             if (!customerModel) {
                 customerModel = CustomerModels.EditableCustomer.fromCurrent();
                 this.model.set('viewB2BAccount', customerModel.attributes.viewB2BAccount);
+                this.model.set('accountToView', customerModel.attributes.accountToView);
             }
         },
         render: function () {
@@ -301,7 +302,9 @@ define(["modules/mozu-utilities", "modules/jquery-mozu", 'modules/api', "undersc
             else {
                 collection = new UsersGridCollectionModel({});
             }
-           
+            if (viewB2BAccount) {
+                collection.filterBy("customerAccountId eq " + self.model.attributes.accountToView);
+            }
 
             var usersGrid = new MozuGrid({
                 el: self.el.find('.mz-b2baccount-users'),
