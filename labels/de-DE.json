@@ -211,6 +211,7 @@
   "expires": "Verfällt",
   "externalOrderId": "External Order #",
   "fieldChanged": "Feld geändert",
+  "filterStatus": "Filterstatus",
   "findAtLocalStore": "Finden an einem lokalen Speicher",
   "firstName": "Vorname",
   "firstNameMissing": "Vorname Pflicht",
