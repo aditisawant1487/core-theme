@@ -46,24 +46,24 @@
                 </div>
                 {% endif %}
                 <div>
-                    <input type="text" name="searchQuoteNumber" id="searchQuoteNumber" class="quotesTextSearch" data-mz-action="inputChanged" placeholder="Quote Number">
+                    <input type="text" name="searchQuoteNumber" id="searchQuoteNumber" class="quotesTextSearch" data-mz-action="inputChanged" placeholder="{{ labels.quoteNumber }}">
                 </div>
                 <div>
-                    <input type="text" name="searchName" id="searchName" class="quotesTextSearch" data-mz-action="inputChanged" placeholder="Quote Name">
+                    <input type="text" name="searchName" id="searchName" class="quotesTextSearch" data-mz-action="inputChanged" placeholder="{{ labels.quoteName }}">
                 </div>
                 <div class="exp-date-filter-container">
                     <Span class="mz-b2b-quotes-compare"> > </Span>
-                    <input type="date" data-mz-is-datepicker id="expirationdate" class="expirationdate-filter" data-mz-action="dateChanged" data-format="yy/mm/dd" placeholder="Search Expiration Date">
+                    <input type="date" data-mz-is-datepicker id="expirationdate" class="expirationdate-filter" data-mz-action="dateChanged" data-format="yy/mm/dd" placeholder="{{ labels.searchExpirationDate }}">
                 </div>
                 <div class="fill-remaining-space"></div>
                 <div>
                     <select class="status-select" data-mz-action="selectionChanged" id="statusDropdown" data-mz-value="">
                     <option selected="selected" value="">{{ labels.filterStatus }}</option>           
-                    <option value="Pending">Pending </option>
-                    <option value="InReview">In Review </option>
-                    <option value="ReadyForCheckout">Ready For Checkout </option>
-                    <option value="Completed">Completed </option>              
-                    <option value="Expired">Expired </option>
+                    <option value="Pending">{{ labels.pending }}</option>
+                    <option value="InReview">{{ labels.inReview }}</option>
+                    <option value="ReadyForCheckout">{{ labels.readyForCheckout }}</option>
+                    <option value="Completed">{{ labels.completed }}</option>              
+                    <option value="Expired">{{ labels.expired }}</option>
                     </select>
                 </div>
             </div>
