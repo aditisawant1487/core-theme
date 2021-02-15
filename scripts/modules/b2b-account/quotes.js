@@ -313,7 +313,7 @@ define([
 
     var QuotesGridCollectionModel = MozuGridCollection.extend({
         mozuType: 'quotes',
-        defaultSort: 'createDate desc',
+        defaultSort: 'number desc',
         columns: [
             {
                 index: 'number',
@@ -419,7 +419,7 @@ define([
     }
     var B2BViewAccountQuotesGridCollectionModel = MozuGridCollection.extend({
             mozuType: 'quotes',
-            defaultSort: 'createDate desc',
+            defaultSort: 'number desc',
             columns: [
                 {
                     index: 'number',
