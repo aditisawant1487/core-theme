@@ -318,7 +318,7 @@ define([
             {
                 index: 'number',
                 displayName: 'Quote Number',
-                sortable: false
+                sortable: true
             },
             {
                 index: 'name',
@@ -424,7 +424,7 @@ define([
                 {
                     index: 'number',
                     displayName: 'Quote Number',
-                    sortable: false
+                    sortable: true
                 },
                 {
                     index: 'name',
