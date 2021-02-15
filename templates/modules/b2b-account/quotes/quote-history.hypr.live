@@ -40,26 +40,22 @@
                             </thead>
                             <tbody>
                               {% for change in history.changes %}
-                              {% if change.path|split("#")[0]!="Destination" %}
+                              {% set changePath=change.path|split("#") %}
+
+                              {% if changePath and changePath[0]!="Destination" %}
 
                               {% if change.path %}
                               <tr class="space-before">
                                     <td>
                                       {% if change.type =='Add' %} {{labels.added}} {% elif change.type =='Remove' %} {{labels.removed}} {% else %} {{labels.updated}} {% endif %}
-                                      {{ change.path }}
+                                      {{ labels.item }} #{{changePath[1]}}
                                       {% set name=change.fields|findwhere("name", "Name") %}
                                       {% set productCode=change.fields|findwhere("name", "ProductCode") %}
                                       {% set variationProductCode=change.fields|findwhere("name", "VariationProductCode") %}
 
                                       {{name.newValue || name.oldValue}}
 
-                                      (
-                                      {% if variationProductCode.newValue or variationProductCode.oldValue %}
-                                      {{variationProductCode.newValue || variationProductCode.oldValue}}
-                                      {% else %}
-                                      {{productCode.newValue || productCode.oldValue}}
-                                      {% endif %}
-                                      )
+                                      ({% if variationProductCode.newValue or variationProductCode.oldValue %}{{variationProductCode.newValue || variationProductCode.oldValue}}{% else %}{{productCode.newValue || productCode.oldValue}}{% endif %})
                                     </td>
                                   </tr>
                               {% endif %}
@@ -69,7 +65,7 @@
                               {% else %}
                               <tr>
                                   <td>
-                                    {% if change.path %}{{change.path}}.{% endif %}{{field.name}}
+                                    {{field.name}}
                                   </td>
                                 <td>
                                     {% include "modules/b2b-account/quotes/quote-history-field" with name=field.name value=field.oldValue %}
@@ -84,7 +80,7 @@
                               {% else %}
 
                               {% if change.path %}
-                              <tr>
+                              <tr class="space-before">
                                 {% set firstName=change.fields|findwhere("name", "FirstName") %}
                                 {% set lastNameOrSurname=change.fields|findwhere("name", "LastNameOrSurname") %}
                                 {% set companyOrOrganization=change.fields|findwhere("name", "CompanyOrOrganization") %}
@@ -102,7 +98,7 @@
 
                                 <td>
                                   {% if change.type =='Add' %} {{labels.added}} {% elif change.type =='Remove' %} {{labels.removed}} {% else %} {{labels.updated}} {% endif %}
-                                  {{ change.path|split("#")[0] }}
+                                  {{ changePath[0] }}
                                 </td>
                                 <td class="address">
                                   <span>

@@ -4,6 +4,8 @@
 	{% elif name=='ExpirationDate' %}
 		{{ value|date("m/d/Y") }}
 	{% else %}
-		{{ value }}
+		{{ value || "-" }}
 	{% endif %}
+{% else %}
+-
 {% endif %}

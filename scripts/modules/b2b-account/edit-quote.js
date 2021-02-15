@@ -805,10 +805,16 @@ define([
         },
         addUserInfoOnModel: function () {
             var self = this;
-            self.setUserNameOnComment(self.model.get('comments'));
-            self.setUserInfoOnAuditHistory(self.model.get('auditHistory'));
+
+            //todo:following method is a fix for - COM-3180 but still WIP
+            var adminUserIds = [];
+            self.setUserNameOnComment(self.model.get('comments'), adminUserIds);
+            self.setUserInfoOnAuditHistory(self.model.get('auditHistory'), adminUserIds);
+            //if (adminUserIds.length > 0) {
+            //    self.getAdminUsers(adminUserIds);
+            //}
         },
-        setUserNameOnComment: function (comments) {
+        setUserNameOnComment: function (comments, adminUserIds) {
             var allB2bUsers = this.model.get('allB2bUsers');
             if (comments && comments.length > 0 &&
                 allB2bUsers && allB2bUsers.length > 0) {
@@ -818,6 +824,9 @@ define([
                         if (comments[c].auditInfo.createBy === allB2bUsers[u].userId) {
                             comments[c].auditInfo.createByName = allB2bUsers[u].firstName + ' ' + allB2bUsers[u].lastName;
                         }
+                        else if (!this.isAlreadyExists(adminUserIds, comments[c].auditInfo.createBy)) {
+                            adminUserIds.push(comments[c].auditInfo.createBy);
+                        }
                     }
                     //Need this for hypr filters. Hypr filter not working on complex/nested objects.
                     comments[c].createDate = comments[c].auditInfo.createDate;
@@ -825,7 +834,7 @@ define([
                 this.model.set('comments', comments);
             }
         },
-        setUserInfoOnAuditHistory: function (auditHistory) {
+        setUserInfoOnAuditHistory: function (auditHistory, adminUserIds) {
             var allB2bUsers = this.model.get('allB2bUsers');
 
             if (auditHistory && auditHistory.length > 0 &&
@@ -836,6 +845,9 @@ define([
                         if (auditHistory[a].auditInfo.createBy === allB2bUsers[u].userId) {
                             auditHistory[a].auditInfo.createByName = allB2bUsers[u].firstName + ' ' + allB2bUsers[u].lastName;
                             auditHistory[a].auditInfo.createByEmail = allB2bUsers[u].emailAddress;
+                        }
+                        else if (!this.isAlreadyExists(adminUserIds, auditHistory[a].auditInfo.createBy)) {
+                            adminUserIds.push(auditHistory[a].auditInfo.createBy);
                         }
                     }
                     //Need this for hypr filters. Hypr filter not working on complex/nested objects.
@@ -935,10 +947,11 @@ define([
             return result;
         },
         addNewAddress: function () {
+            var self = this;
             if (this.model.get('destinations').length > 0)
                 this.model.set('selectedDestination', this.model.apiModel.data.destinations[0]);
             else {
-                this.model.set('selectedDestination', { destinationContact: null });
+                this.model.set('selectedDestination', { destinationContact: self.getEmptyContact() });
             }
 
             addNewAddressViewPopup.model = this.model;
@@ -1013,10 +1026,7 @@ define([
             var self = this;
             self.model.set("selectedDestination", {
                 isDestinationCommercial: null,
-                destinationContact: {
-                    phoneNumbers: {},
-                    address: {}
-                }
+                destinationContact: self.getEmptyContact()
             });
             self.reRenderModal();
         },
@@ -1034,9 +1044,55 @@ define([
             }
             return value;
         },
+        getEmptyContact: function () {
+            return {
+                phoneNumbers: {},
+                address: {}
+            };
+        },
         reRenderModal: function () {
             addNewAddressViewPopup.render();
             this.shippingAddressChnage();
+        },
+
+        //todo:following method is a fix for - COM-3180 but still WIP
+        getAdminUsers: function (userIds) {
+            var self = this;
+
+            var allB2bUsers = this.model.get('allB2bUsers');
+            var allAdminUsers = self.model.get('allAdminUsers');
+
+            if (userIds && userIds.length > 0 && !allAdminUsers) {
+                var filter = " userid in (";
+
+                for (var i = 0; i < userIds.length; i++) {
+                    filter += "'" + userIds[i] + "',";
+                }
+                filter = filter.substring(0, filter.length - 1) + ")";
+
+                self.model.apiModel.getAdminUsers({ filter: filter }).then(function (response) {
+                    self.model.set('allAdminUsers',response.data);
+                    if (response.data) {
+                        for (var i = 0; i < response.data.length; i++) {
+
+                        }
+                    }
+                }, function (error) {
+                    self.model.set('allAdminUsers', ' ');
+                    self.showMessageBar(error);
+                });
+            }
+        },
+
+        isAlreadyExists: function (array, key) {
+            if (array) {
+                for (var i = 0; i < array.length; i++) {
+                    if (key === array[i]) {
+                        return true;
+                    }
+                }
+            }
+            return false;
         }
     });
 
