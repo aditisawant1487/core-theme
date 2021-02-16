@@ -63,6 +63,8 @@
   "b2bAccountInfo": "Account Information",
   "b2bAccountInfoContact": "Contact Information",
   "b2bAccountWelcome": "Welcome, {0}",
+  "b2bAccountRequestSuccessHeading": "Request Successful",
+  "b2bAccountRequestSuccessMessage": "Your request has been sent and is pending approval.",
   "b2bProductPicker": "Product",
   "b2bQuantity": "Qty",
   "b2bRequestAccount": "B2B Request Account",
