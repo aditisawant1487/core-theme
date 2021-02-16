@@ -810,9 +810,9 @@ define([
             var adminUserIds = [];
             self.setUserNameOnComment(self.model.get('comments'), adminUserIds);
             self.setUserInfoOnAuditHistory(self.model.get('auditHistory'), adminUserIds);
-            //if (adminUserIds.length > 0) {
-            //    self.getAdminUsers(adminUserIds);
-            //}
+            if (adminUserIds.length > 0) {
+                self.getAdminUsers(adminUserIds);
+            }
         },
         setUserNameOnComment: function (comments, adminUserIds) {
             var allB2bUsers = this.model.get('allB2bUsers');
@@ -1059,26 +1059,29 @@ define([
         getAdminUsers: function (userIds) {
             var self = this;
 
-            var allB2bUsers = this.model.get('allB2bUsers');
+            var allB2bUsers = this.model.get('allB2bUsers') || [];
             var allAdminUsers = self.model.get('allAdminUsers');
 
-            if (userIds && userIds.length > 0 && !allAdminUsers) {
-                var filter = " userid in (";
+            if (userIds && userIds.length > 0 && !allAdminUsers && allB2bUsers) {
+                var filter = "userid in [";
 
                 for (var i = 0; i < userIds.length; i++) {
                     filter += "'" + userIds[i] + "',";
                 }
-                filter = filter.substring(0, filter.length - 1) + ")";
+                filter = filter.substring(0, filter.length - 1) + "]";
 
-                self.model.apiModel.getAdminUsers({ filter: filter }).then(function (response) {
-                    self.model.set('allAdminUsers',response.data);
-                    if (response.data) {
-                        for (var i = 0; i < response.data.length; i++) {
-
+                $.get("/adminuserproxy/users?filter=" + filter + '&startIndex=0&pageSize=200', function (response) {
+                    self.model.set('allAdminUsers', response.items);
+                    if (response && response.items) {
+                        for (var i = 0; i < response.items.length; i++) {
+                            response.items[i].userId = response.items[i].id;
+                            allB2bUsers.push(response.items[i]);
                         }
+                        self.model.set('allB2bUsers', allB2bUsers);
+                        self.render();
                     }
-                }, function (error) {
-                    self.model.set('allAdminUsers', ' ');
+                }).fail(function (error) {
+                    self.model.set('allAdminUsers', []);
                     self.showMessageBar(error);
                 });
             }
