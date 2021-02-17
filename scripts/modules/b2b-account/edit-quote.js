@@ -1063,26 +1063,25 @@ define([
             var allAdminUsers = self.model.get('allAdminUsers');
 
             if (userIds && userIds.length > 0 && !allAdminUsers && allB2bUsers) {
-                var filter = "userid in [";
-
-                for (var i = 0; i < userIds.length; i++) {
-                    filter += "'" + userIds[i] + "',";
-                }
-                filter = filter.substring(0, filter.length - 1) + "]";
-
-                $.get("/adminuserproxy/users?filter=" + filter + '&startIndex=0&pageSize=200', function (response) {
-                    self.model.set('allAdminUsers', response.items);
-                    if (response && response.items) {
-                        for (var i = 0; i < response.items.length; i++) {
-                            response.items[i].userId = response.items[i].id;
-                            allB2bUsers.push(response.items[i]);
+                $.ajax({
+                    type: "POST",
+                    url: '/adminuserproxy/users',
+                    data: JSON.stringify(userIds),
+                    contentType: 'application/json; charset=utf-8',
+                    success: function (response) {
+                        self.model.set('allAdminUsers', response);
+                        if (response) {
+                            for (var i = 0; i < response.length; i++) {
+                                response[i].userId = response[i].id;
+                                allB2bUsers.push(response[i]);
+                            }
+                            self.model.set('allB2bUsers', allB2bUsers);
+                            self.render();
                         }
-                        self.model.set('allB2bUsers', allB2bUsers);
-                        self.render();
+                    },
+                    error: function (error) {
+                        self.model.set('allAdminUsers', []);
                     }
-                }).fail(function (error) {
-                    self.model.set('allAdminUsers', []);
-                    self.showMessageBar(error);
                 });
             }
         },
