@@ -1060,7 +1060,7 @@ define([
             var self = this;
 
             var allB2bUsers = this.model.get('allB2bUsers') || [];
-
+            var allAdminUsers = this.model.get('allAdminUsers');
             if (userIds && userIds.length > 0 && !allAdminUsers && allB2bUsers) {
                 $.ajax({
                     type: "POST",
