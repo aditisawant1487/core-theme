@@ -569,6 +569,7 @@ define([
                 self.model.set("isEditQuoteName", false);
                 self.model.set("isEditExpirationDate", false);
                 self.model.set("isEditSubmittedBy", false);
+                self.model.set('allAdminUsers', null);
                 self.model.syncApiModel();
                 self.render();
             }, function (error) {
@@ -746,6 +747,7 @@ define([
             self.model.isLoading(false);
             self.model.set(data);
             self.model.set('error', null);
+            self.model.set('allAdminUsers', null);
             self.model.syncApiModel();
             self.render();
         },
@@ -1059,13 +1061,14 @@ define([
 
             var allB2bUsers = this.model.get('allB2bUsers') || [];
 
-            if (userIds && userIds.length > 0 && allB2bUsers) {
+            if (userIds && userIds.length > 0 && !allAdminUsers && allB2bUsers) {
                 $.ajax({
                     type: "POST",
                     url: '/adminuserproxy/users',
                     data: JSON.stringify(userIds),
                     contentType: 'application/json; charset=utf-8',
                     success: function (response) {
+                        self.model.set('allAdminUsers', response);
                         if (response) {
                             for (var i = 0; i < response.length; i++) {
                                 response[i].userId = response[i].id;
@@ -1074,6 +1077,9 @@ define([
                             self.model.set('allB2bUsers', allB2bUsers);
                             self.render();
                         }
+                    },
+                    error: function (error) {
+                        self.model.set('allAdminUsers', []);
                     }
                 });
             }
