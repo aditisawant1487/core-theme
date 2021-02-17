@@ -12,19 +12,17 @@ define(["modules/jquery-mozu", "hyprlive", "modules/models-b2b-account", 'hyprli
       isFormValid = true;
       // perform validation
       var formValues = $('#account-request').serializeArray();
-      formValues.forEach(formValue => {
-        var { name, value } = formValue;
-
-        if (value == "" && name != "taxId") { // taxId is not a required field
+      formValues.forEach(function (formValue){
+        if (formValue.value === "" && formValue.name !== "taxId") { // taxId is not a required field
           isFormValid = false;
           // show validation message
-          $(`[data-mz-validationmessage-for="${name}"]`).show().text(Hypr.getLabel(`${name}Missing`));
-        } else if (name == "userEmail" && !isEmailValid(value)) {
+          $('[data-mz-validationmessage-for="' + formValue.name + '"]').show().text(Hypr.getLabel(formValue.name + 'Missing'));
+        } else if (formValue.name == "userEmail" && !isEmailValid(formValue.value)) {
           isFormValid = false;
-          $(`[data-mz-validationmessage-for="${name}"]`).show().text(Hypr.getLabel(`${name}InValid`));
+          $('[data-mz-validationmessage-for="' + formValue.name + '"]').show().text(Hypr.getLabel(formValue.name + 'InValid'));
         } else {
           // hide the message
-          $(`[data-mz-validationmessage-for="${name}"]`).hide();
+          $('[data-mz-validationmessage-for="' + formValue.name + '"]').hide();
         }
       });
     }
@@ -76,7 +74,7 @@ define(["modules/jquery-mozu", "hyprlive", "modules/models-b2b-account", 'hyprli
     $('#b2b-close-modal').click(function() {
       $('#b2b-success-modal').css('display', 'none');
       window.location.href = "/";
-    })
+    });
 
     $("#account-request").submit(function (e) {
       e.preventDefault();
@@ -84,6 +82,6 @@ define(["modules/jquery-mozu", "hyprlive", "modules/models-b2b-account", 'hyprli
       if (isFormValid) {
         requestAccountApiCall();
       }
-    })
-  })
+    });
+  });
 });
