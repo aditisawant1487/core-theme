@@ -18,11 +18,13 @@ define([
     "modules/views-paging",
     'modules/editable-view',
     "modules/models-quotes",
-    "modules/b2b-account/account-address-search"], 
+    "modules/b2b-account/b2b-contacts", 
+    "modules/b2b-account/account-address-search",
+    "widgets/mz-search-pagination-dd",], 
     function ($, api, _, Hypr, Backbone, HyprLiveContext,
     CustomerModels, CartModels, B2BAccountModels, ProductModalViews,
     ProductPicker, ProductModels, WishlistModels, MozuGrid, MozuGridCollection,
-        PagingViews, EditableView, QuoteModels, B2bContactpopup) {
+        PagingViews, EditableView, QuoteModels, B2bContactsModal) {
         var nameFilter = "name cont ";
         var quoteNumberFilter = "number eq ";
         var expirationDateFilter  = "expirationdate ge ";
@@ -133,18 +135,30 @@ define([
             }
             if (isSalesRep) {
                 if (!self.model.get("b2bAccounts")) {
-                    var b2bAccount = new B2BAccountModels.b2bAccounts({ pageSize: 200 });
-                    b2bAccount.apiGet().then(function (accounts) {
-                        self.model.set("b2bAccounts", accounts);
-                        self.render();
+                    $(document).ready(function () {
+                        $("#selectb2bAccount").mzdropdown({
+                            model: B2BAccountModels.b2bAccounts,
+                            pageSize: 20,
+                            displayField: 'companyOrOrganization',
+                            placeHolder: 'Select Account',
+                            filterOption: 'cont'
+                        });
                     });
                 }
-                $(".quotesTextSearch").addClass("adjust-width");
+
             }
-            $('[data-mz-action="selectionChanged"]').on('change', function(e) {
-                self.filter(collection);
+            $(document).ready(function () {
+                $(document).on('click', '.mozu-dropdown', function () {
+                    $("#createQuoteHompageBtn").prop("disabled", false);
+                });
+                $(document).on('change', '#selectb2bAccount > input', function () {
+                    if ($("#selectb2bAccount > input").data("data-id") === undefined) {
+                        $("#createQuoteHompageBtn").prop("disabled", true);
+                    } 
+                });
             });
-            $('[data-mz-action="inputChanged"]').on('keyup input', function(e) {
+            
+            $('[data-mz-action="applyfilter"]').on('keyup input', function(e) {
                 e.preventDefault();
                 clearTimeout(timeout);
                 timeout = setTimeout(function () {
