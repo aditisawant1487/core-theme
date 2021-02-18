@@ -806,7 +806,6 @@ define([
         addUserInfoOnModel: function () {
             var self = this;
 
-            //todo:following method is a fix for - COM-3180 but still WIP
             var adminUserIds = [];
             self.setUserNameOnComment(self.model.get('comments'), adminUserIds);
             self.setUserInfoOnAuditHistory(self.model.get('auditHistory'), adminUserIds);
@@ -1055,21 +1054,18 @@ define([
             this.shippingAddressChnage();
         },
 
-        //todo:following method is a fix for - COM-3180 but still WIP
         getAdminUsers: function (userIds) {
             var self = this;
 
             var allB2bUsers = this.model.get('allB2bUsers') || [];
-            var allAdminUsers = self.model.get('allAdminUsers');
 
-            if (userIds && userIds.length > 0 && !allAdminUsers && allB2bUsers) {
+            if (userIds && userIds.length > 0 && allB2bUsers) {
                 $.ajax({
                     type: "POST",
                     url: '/adminuserproxy/users',
                     data: JSON.stringify(userIds),
                     contentType: 'application/json; charset=utf-8',
                     success: function (response) {
-                        self.model.set('allAdminUsers', response);
                         if (response) {
                             for (var i = 0; i < response.length; i++) {
                                 response[i].userId = response[i].id;
@@ -1078,9 +1074,6 @@ define([
                             self.model.set('allB2bUsers', allB2bUsers);
                             self.render();
                         }
-                    },
-                    error: function (error) {
-                        self.model.set('allAdminUsers', []);
                     }
                 });
             }
