@@ -28,9 +28,6 @@
         <a href="{{siteContext.siteSubdirectory}}/myaccount#QuickOrder" data-mz-action="quickOrder" data-mz-role="quickOrderLink" data-placement="bottom" class="mz-utilitynav-link"></a>
         {% require_script "modules/quick-order-helper" %}
       </li>
-      <li class="mz-utilitynav-item">
-        <a href="{{siteContext.siteSubdirectory}}/b2baccount/b2b-account-request" data-placement="bottom" class="mz-utilitynav-link">{{ labels.b2bAccountRequest }}</a>
-      </li>
       {%else%}
       <li class="mz-utilitynav-item">
         <a href="{{siteContext.siteSubdirectory}}/user/login" data-mz-action="login" data-placement="bottom" class="mz-utilitynav-link">{{ labels.logIn }}</a>
@@ -40,6 +37,9 @@
       </li>
       {% endif %}
       {% endif %}
+      <li class="mz-utilitynav-item">
+        <a href="{{siteContext.siteSubdirectory}}/b2baccount/b2b-account-request" data-placement="bottom" class="mz-utilitynav-link">{{ labels.b2bAccountRequest }}</a>
+      </li>
       <li class="mz-utilitynav-item">
             <a class="mz-utilitynav-link mz-utilitynav-link-cart" href="{% make_url "cart" %}">
             {{ labels.viewCart }} (<span class="mz-cartmonitor" data-mz-role="cartmonitor">0</span>)
