@@ -29,7 +29,7 @@
         {% require_script "modules/quick-order-helper" %}
       </li>
       <li class="mz-utilitynav-item">
-        <a href="{{siteContext.siteSubdirectory}}/b2baccount/b2b-account-request" data-placement="bottom" class="mz-utilitynav-link">{{ labels.b2bRequestAccount }}</a>
+        <a href="{{siteContext.siteSubdirectory}}/b2baccount/b2b-account-request" data-placement="bottom" class="mz-utilitynav-link">{{ labels.b2bAccountRequest }}</a>
       </li>
       {%else%}
       <li class="mz-utilitynav-item">
