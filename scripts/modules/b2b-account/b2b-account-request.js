@@ -13,6 +13,8 @@ define(["modules/jquery-mozu", "hyprlive", "modules/models-b2b-account", 'hyprli
       // perform validation
       var formValues = $('#account-request').serializeArray();
       formValues.forEach(function (formValue){
+        // remove leading and trailing spaces
+        formValue.value = formValue.value.trim();
         if (formValue.value === "" && formValue.name !== "taxId") { // taxId is not a required field
           isFormValid = false;
           // show validation message
@@ -41,10 +43,10 @@ define(["modules/jquery-mozu", "hyprlive", "modules/models-b2b-account", 'hyprli
       var requestAccount = JSON.parse(JSON.stringify({
         "users": [
           {
-            "emailAddress": $("#userEmail").val(),
-            "userName": $("#userEmail").val(),
-            "firstName": $("#userFirstName").val(),
-            "lastName": $("#userLastName").val(),
+            "emailAddress": $("#userEmail").val().trim(),
+            "userName": $("#userEmail").val().trim(),
+            "firstName": $("#userFirstName").val().trim(),
+            "lastName": $("#userLastName").val().trim(),
             "localeCode": "en-US",
             "acceptsMarketing": false,
             "isActive": false
@@ -52,9 +54,9 @@ define(["modules/jquery-mozu", "hyprlive", "modules/models-b2b-account", 'hyprli
         ],
         "isActive": false,
         "status": "PendingApproval",
-        "taxId": $("#taxId").val(),
+        "taxId": $("#taxId").val().trim(),
         "parentAccountId": "",
-        "companyOrOrganization": $("#companyName").val(),
+        "companyOrOrganization": $("#companyName").val().trim(),
         "accountType": "B2B"
       }));
       // create model

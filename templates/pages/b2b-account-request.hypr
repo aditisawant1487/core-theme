@@ -18,7 +18,7 @@
 
   <div class="mz-b2b-container">
 
-    <h1 class="mz-pagetitle">B2B Account Request</h1>
+    <h1 class="mz-pagetitle">{{ labels.b2bAccountRequest }}</h1>
 
     <form id="account-request">
       <div class="mz-b2b-form-field-group">
