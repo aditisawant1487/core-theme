@@ -179,7 +179,7 @@ define([
                 if (isSalesRep) {
                     //seller account
                     accountType = 'selleraccount';
-                    createQuoteOnAccnt = $("#selectb2bAccount").val();
+                    createQuoteOnAccnt = $("#selectb2bAccount > input").data('id');
                 } else {
                     // buyer account
                     createQuoteOnAccnt = require.mozuData("user").accountId;
@@ -193,16 +193,6 @@ define([
                         "/" + accountType + "/quote/" + res.data.id + "/edit";
                 }, function (error) {
                     self.showMessageBar(error);
-                });
-            });
-          
-            $(document).ready(function () {
-                $("#selectb2bAccount").change(function () {
-                    if ($("#selectb2bAccount").val() === "") {
-                        $("#createQuoteHompageBtn").prop("disabled", true);
-                    } else {
-                        $("#createQuoteHompageBtn").prop("disabled", false);
-                    }
                 });
             });
             if (viewB2BAccount) {
