@@ -23,7 +23,7 @@ define([
     function ($, api, _, Hypr, Backbone, HyprLiveContext,
     CustomerModels, CartModels, B2BAccountModels, ProductModalViews,
     ProductPicker, ProductModels, WishlistModels, MozuGrid, MozuGridCollection,
-        PagingViews, EditableView, QuoteModels, B2bContactsModal) {
+        PagingViews, EditableView, QuoteModels, B2bContactpopup) {
         var nameFilter = "name cont ";
         var quoteNumberFilter = "number eq ";
         var expirationDateFilter  = "expirationdate ge ";
