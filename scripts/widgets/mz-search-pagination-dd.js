@@ -92,7 +92,6 @@ define(["jquery", "underscore"], function ($, _) {
                 $(self.selector + '> .mz-dd-search').val($(this).text());
                 $('.listData > a').removeClass("mz-dd-active");
                 $(this).addClass("mz-dd-active");
-                $('.mz-dd-search').focus();
                 $('.dropdown_data').hide();
                 $(self.selector + '> .mz-dd-search').attr('data-id', $(this).data('id'));
                 filteredVal = false;                
