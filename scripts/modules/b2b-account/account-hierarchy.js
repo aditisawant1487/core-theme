@@ -158,11 +158,12 @@ define(["modules/jquery-mozu", 'modules/api', "underscore", "hyprlive", "modules
                 item.canChangeParentAccount = self.isUserAdmin();
             }
 
+            item.account = self.getAccount(item.id, accounts);
+
             //All accounts that this account can view (self + descendants) are supported as parent accounts when adding a new child account
             if (item.canViewAccount === true)
             {
-                var account = self.getAccount(item.id, accounts);
-                supportedParentAccounts.push(account);
+                supportedParentAccounts.push(item.account);
             }
 
             if (item.children) {
