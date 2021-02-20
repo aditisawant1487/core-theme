@@ -592,6 +592,17 @@ define([
             var self = this;
             self.updateQuote(applyAndCommit);
         },
+        submitForApproval: function () {
+            var items = this.model.get('items');
+            if (items.length > 0) {
+                this.commitDraft();
+            }
+            else {
+                this.showMessageBar({
+                    message: 'At least one item must be added, to be able to submit the quote for approval.'
+                });
+            }
+        },
         refreshQuote: function () {
             var self = this;
             self.model.isLoading(true);
